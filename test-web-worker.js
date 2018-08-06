@@ -1,24 +1,17 @@
 'use strict'
 
-var w;
+window.addEventListener('WorkerMessage', (e) => {
+    var element = document.getElementById("result");
+    element.innerHTML = e.detail;
+},false);
+
+var controller = new WorkController();
 
 function startWebWorker() {
-    if(typeof(Worker) !== "undefined") {
-        if(typeof(w) == "undefined") {
-            w = new Worker("worker.js");
-        }
-        var num =  document.getElementById("number").value
-        w.postMessage(num);
-        w.onmessage = function(event) {
-            document.getElementById("result").innerHTML = event.data;
-        };
-    } else {
-        document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
-    }
+    var num = document.getElementById("number").value;
+    controller.startWorker(num);
 }
 
-
 function stopWebWorker() {
-    w.terminate();
-    w = undefined;
+    controller.stopWorker();
 }
